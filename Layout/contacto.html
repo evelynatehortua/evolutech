@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Iconos-->
+    <script src="https://kit.fontawesome.com/5c2a728a53.js"
+crossorigin="anonymous"></script>
+    <title>EvoluTech</title>
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header>
+        <h2 class="logo">EvoluTech</h2>
+        <input type="checkbox" id="check">
+        <label for="check" class="mostrar-menu">
+            &#8801
+        </label>
+        <nav class="menu">
+            <a href="../index.html">Inicio</a>
+            <a href="nosotros.html">Sobre nosotros</a>
+            <a href="contacto.html">Contacto</a>
+            <a href="empezar.html">Iniciar sesion</a>
+            <label for="check" class="esconder-menu">
+                &#215
+            </label>
+        </nav>
+    </header>
+    <section id="contacto">
+        <h4>Contacta con nosotros</h4>
+        <form id="form1" action="../Controller/controllerContactos.html" method="post">
+        <input type="hidden" name="accion" value="guardar">
+        <input type="hidden" name="origen" value="../Layout/contacto.html">
+            <div class="datos-form">
+                <div class="nombre">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" placeholder="nombre" required>
+                </div>
+                <div class="apellido">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" name="apellido" id="apellido" placeholder="apellido" required>
+                </div>
+            </div>
+            <div class="datos-form">
+            <div class="celular">
+                    <label for="celular">Celular</label>
+                    <input type="number" name="celular" id="celular" placeholder="celular" required>
+                </div>
+                <div class="email">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="email" required>
+                </div>
+            </div>
+            <div class="mensaje">
+                <label for="mensaje">Mensaje</label>
+                <textarea name="mensaje" id="mensaje" cols="40" rows="10" placeholder="mensaje" required></textarea>
+            </div>
+            <div class="datos-form">
+            <div>
+                <label>¿A través de qué medio prefiere ser contactado?</label>
+            </div>
+            <div class="medio_contacto">    
+                <label><input type="radio" name="medio_contacto" value="email" required>Email</label>
+                <label><input type="radio" name="medio_contacto" value="telefono">Teléfono</label>
+                <label><input type="radio" name="medio_contacto" value="whatsapp">WhatsApp</label>
+                <label><input type="radio" name="medio_contacto" value="sms">SMS</label>
+            </div>
+            </div>
+            <div class="boton-formulario">
+                <button type="submit" class="boton-saber-mas">Enviar mensaje</button>
+            </div>
+        </form>
+    </section>
+</body>
+
+
+session_start(); // Iniciar sesión para acceder a $_SESSION
+
+if (isset($_SESSION['mensaje'])) {
+    echo "<div class='mensaje'>{$_SESSION['mensaje']}</div>";
+    unset($_SESSION['mensaje']); // Eliminar el mensaje después de mostrarlo
+}
+
+
+</html>
+<footer>
+    <p>
+        &copy: 2024 EvoluTech
+    </p>
+</footer>
+</html>

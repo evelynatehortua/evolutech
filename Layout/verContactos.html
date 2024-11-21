@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Iconos -->
+    <script src="https://kit.fontawesome.com/5c2a728a53.js" crossorigin="anonymous"></script>
+    <title>EvoluTech</title>
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <link rel="stylesheet" href="../style.css">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <header>
+        <h2 class="logo">EvoluTech</h2>
+        <input type="checkbox" id="check">
+        <label for="check" class="mostrar-menu">&#8801</label>
+        <nav class="menu">
+            <a href="../index.html">Cerrar sesión</a>
+            <label for="check" class="esconder-menu">&#215</label>
+        </nav>
+    </header>
+
+    <section id="crud" class="container mt-5">
+        <h3 class="mb-4">Gestión de Contactos</h3>
+         if (isset($_SESSION['mensaje'])): 
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                 echo $_SESSION['mensaje']; unset($_SESSION['mensaje']); 
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+         endif; 
+        <!-- Formulario -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form action="../Controller/controllerContactos.html" method="POST" id="formPrincipal">
+                    <input type="hidden" name="id" id="id" value=" echo $contactoEditable['id'] ?? ''; ">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" name="nombre" id="nombre"
+                                   value=" echo $contactoEditable['nombre'] ?? ''; " placeholder="Nombre" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" name="apellido" id="apellido"
+                                   value=" echo $contactoEditable['apellido'] ?? ''; " placeholder="Apellido" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="celular" class="form-label">Celular</label>
+                            <input type="text" class="form-control" name="celular" id="celular"
+                                   value=" echo $contactoEditable['celular'] ?? ''; " placeholder="Celular" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" id="email"
+                                   value=" echo $contactoEditable['correo'] ?? ''; " placeholder="Email" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="mensaje" class="form-label">Mensaje</label>
+                        <textarea class="form-control" name="mensaje" id="mensaje" rows="3" placeholder="Escriba un mensaje"> echo $contactoEditable['mensaje'] ?? ''; </textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="medio_contacto" class="form-label">Medio de Contacto</label>
+                        <select class="form-select" name="medio_contacto" id="medio_contacto">
+                            <option value="Email"  echo (isset($contactoEditable['medio']) && $contactoEditable['medio'] === 'Email') ? 'selected' : ''; >Email</option>
+                            <option value="Teléfono"  echo (isset($contactoEditable['medio']) && $contactoEditable['medio'] === 'Teléfono') ? 'selected' : ''; >Teléfono</option>
+                            <option value="Whatsapp"  echo (isset($contactoEditable['medio']) && $contactoEditable['medio'] === 'Whatsapp') ? 'selected' : ''; >Whatsapp</option>
+                            <option value="SMS"  echo (isset($contactoEditable['medio']) && $contactoEditable['medio'] === 'SMS') ? 'selected' : ''; >SMS</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                         if ($contactoEditable): 
+                            <!-- Muestra el botón "Actualizar" solo si se está editando -->
+                            <button type="submit" name="accion" value="editar" class="btn btn-primary">Guardar</button>
+                         else: 
+                            <!-- Con esto el botón "Guardar" estará oculto por defecto -->
+                            <button type="submit" name="accion" value="guardar" class="btn btn-primary d-none" id="guardarBtn">Guardar</button>
+                         endif; 
+                        <button type="reset" class="btn btn-secondary">Limpiar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabla con contactos -->
+        <table class="table table-hover table-bordered">
+            <thead class="table-secondary">
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Celular</th>
+                    <th>Email</th>
+                    <th>Mensaje</th>
+                    <th>Medio de Contacto</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                 if (!empty($contactos)): 
+                     foreach ($contactos as $c): 
+                        <tr>
+                            <td class="text-center"> echo htmlspecialchars($c['id']); </td>
+                            <td> echo htmlspecialchars($c['nombre']); </td>
+                            <td> echo htmlspecialchars($c['apellido']); </td>
+                            <td> echo htmlspecialchars($c['celular']); </td>
+                            <td> echo htmlspecialchars($c['correo']); </td>
+                            <td> echo htmlspecialchars($c['mensaje']); </td>
+                            <td> echo htmlspecialchars($c['medio']); </td>
+                            <td class="text-center">
+                                <form action="" method="POST" class="d-inline">
+                                    <input type="hidden" name="id" value=" echo $c['id']; ">
+                                    <button type="submit" name="accion" value="editar" class="btn btn-warning btn-sm" onclick="mostrarBotonGuardar()">Editar</button>
+                                </form>
+                                <form action="../Controller/controllerContactos.html" method="POST" class="d-inline">
+                                    <input type="hidden" name="id" value=" echo $c['id']; ">
+                                    <button type="submit" name="accion" value="eliminar" class="btn btn-danger btn-sm">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                     endforeach; 
+                 else: 
+                    <tr>
+                        <td colspan="8" class="text-center">No hay contactos registrados.</td>
+                    </tr>
+                 endif; 
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Script para mostrar el botón "Guardar" -->
+    <script>
+        function mostrarBotonGuardar() {
+            const guardarBtn = document.getElementById('guardarBtn');
+            if (guardarBtn) {
+                guardarBtn.classList.remove('d-none');
+            }
+        }
+    </script>
+</body>
+</html>
+
+<footer>
+    <p>
+        &copy: 2024 EvoluTech
+    </p>
+</footer>
+</html>

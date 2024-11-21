@@ -1,0 +1,92 @@
+
+require_once '../Model/contactos.html';
+session_start();
+
+Class controllerContacto{
+    function listarContactos() {
+        $contacto = new contacto();
+        return $contacto->obtenerContactos();
+    }
+
+    function obtenerContacto($id) {
+        $contacto = new contacto();
+        return $contacto->obtenerContactoPorId($id);
+    }
+
+    function guardarContacto($nombre, $apellido, $celular, $correo, $mensaje, $medio){
+        $contacto = new contacto();
+        $contacto->setNombre ($nombre);
+        $contacto->setApellido($apellido);
+        $contacto->setCelular($celular);
+        $contacto->setCorreo($correo);
+        $contacto->setMensaje($mensaje);
+        $contacto->setMedio($medio);
+        //$contacto->guardarRegistro();
+
+        if ($contacto->guardarRegistro()) {
+            $_SESSION['mensaje'] = "Su mensaje ha sido enviado con exito.";
+        } else {
+            $_SESSION['mensaje'] = "Hubo un error al su mensaje. Inténtalo nuevamente.";
+        }
+
+        // Redirigir a la página de contacto después de guardar
+        
+        //$origen = $_POST['origen'] ?? '../Layout/contacto.php'; // Si no se especifica, ir a contacto.php
+        //header("Location: $origen");
+        header("Location: ../Layout/contacto.html");
+        exit();
+    }
+
+    function actualizarContacto($id, $nombre, $apellido, $celular, $correo, $mensaje, $medio) {
+        $contacto = new contacto();
+        if ($contacto->actualizarContacto($id, $nombre, $apellido, $celular, $correo, $mensaje, $medio)) {
+            $_SESSION['mensaje'] = "Contacto actualizado con éxito.";
+        } else {
+            $_SESSION['mensaje'] = "Error al actualizar el contacto.";
+        }
+        header("Location: ../Layout/verContactos.html");
+        exit();
+    }
+
+    function eliminarContacto($id) {
+        $contacto = new contacto();
+        if ($contacto->eliminarContacto($id)) {
+            $_SESSION['mensaje'] = "Contacto eliminado con éxito.";
+        } else {
+            $_SESSION['mensaje'] = "Error al eliminar el contacto.";
+        }
+        header("Location: ../Layout/verContactos.html");
+        exit();
+    }
+
+    function validarDatos() {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $accion = $_POST['accion'] ?? '';
+            $id = $_POST['id'] ?? null;
+            $nombre = $_POST['nombre'] ?? '';
+            $apellido = $_POST['apellido'] ?? '';
+            $celular = $_POST['celular'] ?? '';
+            $correo = $_POST['email'] ?? '';
+            $mensaje = $_POST['mensaje'] ?? '';
+            $medio = $_POST['medio_contacto'] ?? '';
+
+            switch ($accion) {
+                case 'guardar':
+                    $this->guardarContacto($nombre, $apellido, $celular, $correo, $mensaje, $medio);
+                    break;
+                case 'editar':
+                    $this->actualizarContacto($id, $nombre, $apellido, $celular, $correo, $mensaje, $medio);
+                    break;
+                case 'eliminar':
+                    $this->eliminarContacto($id);
+                    break;
+                default:
+                    $_SESSION['mensaje'] = "Acción no reconocida.";
+                    header("Location: ../Layout/verContactos.html");
+                    exit();
+            }
+        }
+    }
+}
+$obj = new controllerContacto();
+$obj->validarDatos();
