@@ -73,16 +73,6 @@ crossorigin="anonymous"></script>
         </form>
     </section>
 </body>
-
-
-session_start(); // Iniciar sesión para acceder a $_SESSION
-
-if (isset($_SESSION['mensaje'])) {
-    echo "<div class='mensaje'>{$_SESSION['mensaje']}</div>";
-    unset($_SESSION['mensaje']); // Eliminar el mensaje después de mostrarlo
-}
-
-
 </html>
 <footer>
     <p>
