@@ -24,13 +24,7 @@
     </header>
 
     <section id="crud" class="container mt-5">
-        <h3 class="mb-4">Gestión de Contactos</h3>
-         if (isset($_SESSION['mensaje'])): 
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                 echo $_SESSION['mensaje']; unset($_SESSION['mensaje']); 
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-         endif; 
+        <h3 class="mb-4">Gestión de Contactos</h3> 
         <!-- Formulario -->
         <div class="card mb-4">
             <div class="card-body">
@@ -107,33 +101,9 @@
                 </tr>
             </thead>
             <tbody>
-                 if (!empty($contactos)): 
-                     foreach ($contactos as $c): 
-                        <tr>
-                            <td class="text-center"> echo htmlspecialchars($c['id']); </td>
-                            <td> echo htmlspecialchars($c['nombre']); </td>
-                            <td> echo htmlspecialchars($c['apellido']); </td>
-                            <td> echo htmlspecialchars($c['celular']); </td>
-                            <td> echo htmlspecialchars($c['correo']); </td>
-                            <td> echo htmlspecialchars($c['mensaje']); </td>
-                            <td> echo htmlspecialchars($c['medio']); </td>
-                            <td class="text-center">
-                                <form action="" method="POST" class="d-inline">
-                                    <input type="hidden" name="id" value=" echo $c['id']; ">
-                                    <button type="submit" name="accion" value="editar" class="btn btn-warning btn-sm" onclick="mostrarBotonGuardar()">Editar</button>
-                                </form>
-                                <form action="../Controller/controllerContactos.html" method="POST" class="d-inline">
-                                    <input type="hidden" name="id" value=" echo $c['id']; ">
-                                    <button type="submit" name="accion" value="eliminar" class="btn btn-danger btn-sm">Eliminar</button>
-                                </form>
-                            </td>
-                        </tr>
-                     endforeach; 
-                 else: 
                     <tr>
                         <td colspan="8" class="text-center">No hay contactos registrados.</td>
                     </tr>
-                 endif; 
             </tbody>
         </table>
     </section>
